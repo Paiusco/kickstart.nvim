@@ -312,12 +312,19 @@ require('lazy').setup({
       require('telescope').setup {
         -- You can put your default mappings / updates / etc. in here
         --  All the info you're looking for is in `:help telescope.setup()`
-        --
-        -- defaults = {
-        --   mappings = {
-        --     i = { ['<c-enter>'] = 'to_fuzzy_refine' },
-        --   },
-        -- },
+        defaults = {
+          -- layout_strategy = 'vertical',
+          layout_config = {
+            preview_width = 70,
+          },
+          path_display = { 'smart' },
+          -- path_display = {
+          --   shorten = { len = 5, exclude = { 1, -1 } },
+          -- },
+          --   mappings = {
+          --     i = { ['<c-enter>'] = 'to_fuzzy_refine' },
+          --   },
+        },
         -- pickers = {}
         extensions = {
           ['ui-select'] = {
@@ -474,6 +481,10 @@ require('lazy').setup({
           -- or a suggestion from your LSP for this to activate.
           map('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction', { 'n', 'x' })
 
+          -- Enable and disable the code lsp check
+          map('<leader>cs', ':LspStop<cr>', '[C]ode [S]top', { 'n', 'x' })
+          map('<leader>ct', ':LspStart<cr>', '[C]ode S[t]art', { 'n', 'x' })
+
           -- WARN: This is not Goto Definition, this is Goto Declaration.
           --  For example, in C this would take you to the header.
           map('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
@@ -536,7 +547,11 @@ require('lazy').setup({
       --  - settings (table): Override the default settings passed when initializing the server.
       --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
       local servers = {
-        clangd = {},
+        clangd = {
+          init_options = {
+            fallbackFlags = { '--std=c++20' },
+          },
+        },
         -- gopls = {},
         -- pyright = {},
         -- rust_analyzer = {},
